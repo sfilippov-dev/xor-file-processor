@@ -182,8 +182,7 @@ bool MainWindow::validateInputs(QString *error) const
     }
     // Совпадение папок + «Перезаписать» означает запись результата поверх входного
     // файла. Вместе с «удалять входные» это уничтожило бы и результат.
-    const bool sameDir = QFileInfo(m_inputDirEdit->text()).absoluteFilePath()
-                      == QFileInfo(m_outputDirEdit->text()).absoluteFilePath();
+    const bool sameDir = isSamePath(m_inputDirEdit->text(), m_outputDirEdit->text());
     const bool overwrite = NameConflictPolicy(m_conflictBox->currentData().toInt())
                         == NameConflictPolicy::Overwrite;
     if (sameDir && overwrite && m_removeInputBox->isChecked()) {

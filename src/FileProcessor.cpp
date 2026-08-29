@@ -94,8 +94,7 @@ void FileProcessor::process(const ProcessTask &task)
 
     // Выход может совпасть со входом: та же папка + политика «Перезаписать».
     // Тогда входной файл удалять нельзя - это и есть результат.
-    const bool outputReplacesInput =
-        QFileInfo(outputPath).absoluteFilePath() == QFileInfo(task.inputPath).absoluteFilePath();
+    const bool outputReplacesInput = isSamePath(outputPath, task.inputPath);
 
     // Пишем во временный файл; переименовываем только при полном успехе,
     // чтобы отмена/сбой не оставляли частично обработанный файл под целевым именем.

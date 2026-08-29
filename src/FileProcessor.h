@@ -3,12 +3,28 @@
 
 #include <QObject>
 #include <QString>
+#include <QFileInfo>
 #include <QMutex>
 #include <QWaitCondition>
 #include <QElapsedTimer>
 #include <atomic>
 #include <cstdint>
 #include <QMetaType>
+
+// Сравнение путей с учётом регистра файловой системы: Windows регистр
+// не различает (C:\Files и c:\files - одно и то же), Linux и macOS различают.
+// Обычное сравнение строк дало бы на Windows ложное "разные файлы".
+inline bool isSamePath(const QString &left, const QString &right)
+{
+#ifdef Q_OS_WIN
+    const Qt::CaseSensitivity sensitivity = Qt::CaseInsensitive;
+#else
+    const Qt::CaseSensitivity sensitivity = Qt::CaseSensitive;
+#endif
+    return QString::compare(QFileInfo(left).absoluteFilePath(),
+                            QFileInfo(right).absoluteFilePath(),
+                            sensitivity) == 0;
+}
 
 // Политика поведения при совпадении имени выходного файла.
 enum class NameConflictPolicy {
