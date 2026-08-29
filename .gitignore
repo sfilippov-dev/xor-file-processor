@@ -1,0 +1,5 @@
+build/
+*.user
+*.o
+moc_*.cpp
+*.part
